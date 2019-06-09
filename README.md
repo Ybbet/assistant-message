@@ -1,23 +1,30 @@
 # assistant-message
 
-Dans le fichier `message.js` on retrouve la structure minimale à utiliser pour créer un autre plugin.
+Ce plugin de [assistant-plugins](https://aymkdn.github.io/assistant-plugins/) permet de lire un fichier ics et de lancer une notification sur les Google Home.
 
-## Créer son plugin
+## Pré-requis
+Avant toutes choses, il est nécessaire d'installer `assistant-plugins` et le plugin `assistant-notifier`. Vous devrez les configurer correctement pour profiter pleinement du présent plugin.
 
-Suivre les explications données sur le wiki : https://github.com/Ybbet/assistant-message/wiki
+## Installation
+
+Si vous n'avez pas installé `assistant-plugins`, alors il faut le faire, et sélectionner __message__ comme plugin.
+
+Si vous avez déjà installé `assistant-plugins`, et que vous souhaitez ajouter ce plugin, alors :
+
+* Pour Windows, télécharger install_message.bat dans le répertoire `assistant-plugins`, puis l'exécuter en double-cliquant dessus.
+* Pour Linux/MacOS, ouvrir une console dans le répertoire `assistant-plugins` et taper :
+`npm install assistant-message@latest --save && npm run-script postinstall`
 
 ## Configuration
 
-Si vous avez besoin de configuration, elle doit être stockée dans le fichier `configuration.json`.
+Éditer le fichier `configuration.json` du répertoire assistant-plugins et y indiquer l'url vers votre fichier ics en ligne. Exemple :
 
-## Utilisation
+```
+    "message": {
+      "ics": "https://calendar.google.com/calendar/ical/32ph4p3h4i23u29i4bvkbef%40group.calendar.google.com/private-23hpdfp240o04nl2nvp094jolzef/basic.ics"
+    }
+```
 
-Le plugin sera appelé quand le message `message_XXX` sera envoyé à Pushbullet (depuis IFTTT), avec `message` le nom du plugin, et `XXX` la commande envoyée au plugin en question.
+## Remarque
 
-## Faire Valider
-
-Une fois que tout est prêt, vous pouvez demander à ajouter votre plugin sur [https://github.com/Ybbet/assistant-plugins](https://github.com/Ybbet/assistant-plugins). Je vérifierai que tout est bon et je l'ajouterai.
-
-## Publication
-
-Une fois votre plugin validé et prêt, vous pouvez le publier sur [https://www.npmjs.com/](https://www.npmjs.com/)
+Ce plugin n'offre pas de `commande` utilisable par PushBullet car tout se fait de façon indépendante de la plateforme en local sur votre machine.
