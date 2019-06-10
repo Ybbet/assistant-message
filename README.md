@@ -25,6 +25,18 @@ Si vous avez déjà installé `assistant-plugins`, et que vous souhaitez ajouter
     }
 ```
 
+## Utilisation
+
+Une fois configurée, le plugin lira toutes les minutes le fichier ICS indiqué. A chaque événement commençant le jour même à l'heure de sa lecture (cf. chaque minute), le plugin enverra une commande à `assistant-notifier` sour la forme :
+```
+notifier_{google_home_id} mon message
+```
+
+Pour se faire, vous devez respecter les règles suivantes :
+* Le titre de l'événement sera le texte diffusé votre ou vos Google Home
+* le descriptif _(ou les notes selon votre gestionnaire de calendrier)_ contiendra le ou les noms de Google Home désiré(s). Ces noms sont ceux que vous aurez indiqué dans votre configuration du plugin `assistant-notifier`
+
+
 ## Remarque
 
 Ce plugin n'offre pas de `commande` utilisable par PushBullet car tout se fait de façon indépendante de la plateforme en local sur votre machine.
