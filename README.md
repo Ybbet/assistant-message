@@ -32,10 +32,20 @@ Une fois configurée, le plugin lira toutes les minutes le fichier ICS indiqué.
 notifier_{google_home_id} mon message
 ```
 
-Pour se faire, vous devez respecter les règles suivantes :
-* Le titre de l'événement sera le texte diffusé votre ou vos Google Home
-* le descriptif _(ou les notes selon votre gestionnaire de calendrier)_ contiendra le ou les noms de Google Home désiré(s). Ces noms sont ceux que vous aurez indiqué dans votre configuration du plugin `assistant-notifier`
+Pour se faire, losque vous créez un nouvel événément dans le calendrier dédié à ce plugin, vous devez respecter les règles suivantes :
+* __Le titre de l'événement__ sera le texte diffusé votre ou vos Google Home
+* __Le descriptif__ _(ou les notes selon votre gestionnaire de calendrier)_ contiendra le ou les noms de Google Home désiré(s). Se référer à la documentation du plugin `assistant-notifier` pour plus de renseignement. Il ne faut pas mettre d'accolades dans le descriptif de l'événement. Il suffit de séparer les identifiants de Google home par une virgule.
 
+## Avantage
+
+L'utilisation de ce plugin permet de ne plus passer par pushbullet et IFTTT pour avoir une solution équivalente. De plus, avec l'utilisation des serveurs gratuits de pushbullet et IFTTT, il est possible qu'il y est un retard de retransmission du message sur les Google Home.
+De plus, vous pourrez vos messages depuis votre calendrier et toutes les fonctionnalités qui lui sont propre :
+* répétition d'un événement ;
+* plusieurs événements dans la journée ;
+* partage du calendrier avec d'autres personnes ;
+* etc.
+
+Il devient maintenant accessible d'utiliser les messages sur votre Google Home sans être _"geek"_.
 
 ## Remarque
 
