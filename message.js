@@ -1,27 +1,7 @@
-// var path = require('path'), fs = require('fs'), config = module.parent.parent.filename.replace('index.js','configuration.json');
-// config = require(module.parent.parent.filename.replace('index.js','configuration.json'));
-// var ics_file = config.plugins.message.ics;
-const ical = require('node-ical');
+var ical = require('node-ical');
 
 /**
- * Cette fonction crée un timetstamp SANS secondes car l'event ne prend pas en compte les secondes (toujours égal à 00)
- * @returns {string}
- */
-function now_timestamp() {
-  var now = new Date();
-  var month = now.getMonth()+1;
-  if (month < 10) month="0"+month;
-  var day = now.getDate()+1;
-  if (day < 10) day="0"+day;
-  var hours = now.getHours();
-  if (hours < 10) hours = hours="0"+hours;
-  var minutes = now.getMinutes();
-  if (minutes < 10) minutes = minutes="0"+minutes;
-  return now.getFullYear()+'-'+month+'-'+day+' '+hours+':'+minutes+':00';
-}
-
-/**
- * Transformer la date (de l'event) en timestamp
+ * Transformer la date (de l'event) en timestamp SANS secondes car l'event ne prend pas en compte les secondes (toujours égal à 00)
  * @param date
  * @returns {string}
  */
@@ -60,38 +40,32 @@ AssistantMessage.prototype.init = function(plugins) {
   // Il faut avoir renseigner l'adresse du fichier ics
   if (!this.ics) return Promise.reject("[assistant-message] Erreur : vous devez configurer ce plugin !");
 
-  return Promise.resolve(this)
-    .then(function(resource){
-      console.log("[assistant-message] Lancement du cron.");
-      // Maintenant que tous les plugins ont été chargé, on peut lancer l'interval du cron.
-      // l'action pour `notifier` se trouve dans resource.plugins.notifier
-      setInterval(function(){
-        ical.fromURL(resource.ics, {}, function (err, data) {
-          for (let k in data) {
-            if (data.hasOwnProperty(k)) {
-              var ev = data[k];
-              var date = now_timestamp();
-              if (data[k].type === 'VEVENT') {
-                var date_ev = event_totimestamp(ev.start);
-                if (date_ev === date){
-                  if (resource.plugins.notifier) {
-                    if (evt.description.length > 0) {
-                      // On a indiqué dans la description de l'événement les Google Home désirés
-                      resource.plugins.notifier.action("{"+ev.description+"} "+ev.summary);
-                    } else {
-                      // Il n'y a pas de descriptif, donc, on ne passe pas d'info à notifier.
-                      resource.plugins.notifier.action(ev.summary);
-                    }
-                  }
-                }
+  console.log("[assistant-message] Lancement du cron.");
+  // Maintenant que tous les plugins ont été chargéq, on peut lancer l'interval du cron.
+  setInterval(function(){
+    ical.fromURL(resource.ics, {}, function (err, data) {
+      for (let k in data) {
+        if (data.hasOwnProperty(k)) {
+          var ev = data[k];
+          var date = event_totimestamp(new Date());
+          if (data[k].type === 'VEVENT') {
+            var date_ev = event_totimestamp(ev.start);
+            if (date_ev === date && _this.plugins.notifier) {
+              if (evt.description.length > 0) {
+                // On a indiqué dans la description de l'événement les Google Home désirés
+                _this.plugins.notifier.action("{"+ev.description+"} "+ev.summary);
+              } else {
+                // Il n'y a pas de descriptif, donc, on ne passe pas d'info à notifier.
+                _this.plugins.notifier.action(ev.summary);
               }
             }
           }
-        });
-      }, 60000); // On vérifie toutes les minutes
-    }).catch(function(err) {
-      console.log(err)
+        }
+      }
     });
+  }, 60000); // On vérifie toutes les minutes
+
+  return Promise.resolve(this);
 };
 
 /**
