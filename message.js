@@ -43,7 +43,7 @@ AssistantMessage.prototype.init = function(plugins) {
   console.log("[assistant-message] Lancement du cron.");
   // Maintenant que tous les plugins ont été chargéq, on peut lancer l'interval du cron.
   setInterval(function(){
-    ical.fromURL(resource.ics, {}, function (err, data) {
+    ical.fromURL(_this.ics, {}, function (err, data) {
       for (let k in data) {
         if (data.hasOwnProperty(k)) {
           var ev = data[k];
@@ -51,7 +51,8 @@ AssistantMessage.prototype.init = function(plugins) {
           if (data[k].type === 'VEVENT') {
             var date_ev = event_totimestamp(ev.start);
             if (date_ev === date && _this.plugins.notifier) {
-              if (evt.description.length > 0) {
+              console.log("[assistant-message] Un message à diffuser.");
+              if (ev.description.length > 0) {
                 // On a indiqué dans la description de l'événement les Google Home désirés
                 _this.plugins.notifier.action("{"+ev.description+"} "+ev.summary);
               } else {
