@@ -1,6 +1,6 @@
 {
   "name": "assistant-message",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Plugin pour 'assistant-plugins' qui permet de lire un fichier ics et de lancer une notification sur les Google Home.",
   "author": "ybbet",
   "main": "message.js",
@@ -10,5 +10,13 @@
     "node-ical": "^0.9.2",
     "path": "0.12.7",
     "fs": "^0.0.1-security"
-  }
+  },
+  "keywords": [
+    "assistant-plugins",
+    "message",
+    "calendar",
+    "node",
+    "assistant",
+    "google-home"
+  ]
 }
