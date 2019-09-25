@@ -45,6 +45,8 @@ var AssistantMessage = function(configuration) {
   // par exemple configuration.key si on a `{ "key": "XXX" }` dans le fichier configuration.json
   // exemple: this.key = configuration.key;
   this.ics = configuration.ics;
+  this.start = configuration.start;
+  this.end = configuration.end;
 }
 
 /**
@@ -59,31 +61,35 @@ AssistantMessage.prototype.init = function(plugins) {
   _this.plugins = plugins;
   // Il faut avoir renseigner l'adresse du fichier ics
   if (!this.ics) return Promise.reject("[assistant-message] Erreur : vous devez configurer ce plugin !");
+  var today = new Date().getHours();
 
   console.log("[assistant-message] Lancement du cron.");
   // Maintenant que tous les plugins ont été chargéq, on peut lancer l'interval du cron.
   setInterval(function(){
-    ical.fromURL(_this.ics, {}, function (err, data) {
-      for (let k in data) {
-        if (data.hasOwnProperty(k)) {
-          var ev = data[k];
-          var date = event_totimestamp(new Date());
-          if (data[k].type === 'VEVENT') {
-            var date_ev = event_totimestamp(ev.start);
-            if (date_ev === date && _this.plugins.notifier) {
-              console.log("[assistant-message] (" + timestamp() + ") Un message à diffuser.");
-              if (ev.description.length > 0) {
-                // On a indiqué dans la description de l'événement les Google Home désirés
-                _this.plugins.notifier.action("{"+ev.description+"} "+ev.summary);
-              } else {
-                // Il n'y a pas de descriptif, donc, on ne passe pas d'info à notifier.
-                _this.plugins.notifier.action(ev.summary);
+    if (today >= _this.start && today <= _this.end) {
+      ical.fromURL(_this.ics, {}, function (err, data) {
+        for (let k in data) {
+          if (data.hasOwnProperty(k)) {
+            var ev = data[k];
+            var date = event_totimestamp(new Date());
+            if (data[k].type === 'VEVENT') {
+              var date_ev = event_totimestamp(ev.start);
+              console.log(date_ev);
+              if (date_ev === date && _this.plugins.notifier) {
+                console.log("[assistant-message] (" + timestamp() + ") Un message à diffuser.");
+                if (ev.description.length > 0) {
+                  // On a indiqué dans la description de l'événement les Google Home désirés
+                  _this.plugins.notifier.action("{"+ev.description+"} "+ev.summary);
+                } else {
+                  // Il n'y a pas de descriptif, donc, on ne passe pas d'info à notifier.
+                  _this.plugins.notifier.action(ev.summary);
+                }
               }
             }
           }
         }
-      }
-    });
+      });
+    }
   }, 60000); // On vérifie toutes les minutes
 
   return Promise.resolve(this);
